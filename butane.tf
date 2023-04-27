@@ -88,7 +88,7 @@ storage:
             --volume "${local.data_volume_path}:/app/config:Z" \
             --name storj-node docker.io/storjlabs/storagenode:latest ${join(" ", var.extra_parameters)}
           podman generate systemd --new --after install-storj-node.service --name storj-node > /etc/systemd/system/storj-node.service 
-          systemctl --user daemon-reload
+          systemctl daemon-reload
           systemctl enable --now storj-node.service
           echo "storj-node service installed..."
 systemd:
