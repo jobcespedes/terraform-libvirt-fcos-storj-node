@@ -59,6 +59,8 @@ storage:
 
           # setup
           echo "Setting up storj-node..."
+          podman kill storj-node 2>/dev/null || echo
+          podman rm storj-node 2>/dev/null || echo
           podman run --rm -e SETUP="true" \
             -p 28967:28967/tcp \
             -p 28967:28967/udp \
@@ -75,6 +77,8 @@ storage:
 
           # install
           echo "Installing storj-node service..."
+          podman kill storj-node 2>/dev/null || echo
+          podman rm storj-node 2>/dev/null || echo
           podman create --pull newer --restart unless-stopped --stop-timeout 300 \
             -p 28967:28967/tcp \
             -p 28967:28967/udp \
