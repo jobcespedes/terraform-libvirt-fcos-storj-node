@@ -19,10 +19,20 @@ locals {
   keymap   = "latam"
   # grub_password_hash: grub.pbkdf2.sha512.10000.DA15B9D5C0E04CDD6510922F9B6027B9DFE36CA65EBEC335A72321D0354BCCE9E531858765C6FE03F53EBF9ABF7E35EAE2861D27D4E6E1302C906F5276D35D90.A32FFEDB2A223426DD561C6F90DA5AB043A59B3CE074326AA88CCD4B3EA9CE8F014DD33B75C3E46DD3DD5E0EE50AE9B380E6E191E3DC5086D6536B55D734268E
   rollout_wariness = "0.5"
-  updates_periodic_window = {
-    days           = ["Sun"],
-    start_time     = "00:00",
-    length_minutes = "60"
+  periodic_updates = {
+    time_zone = "localtime"
+    windows = [
+      {
+        days           = ["Sat"],
+        start_time     = "23:30",
+        length_minutes = "60"
+      },
+      {
+        days           = ["Sun"],
+        start_time     = "00:30",
+        length_minutes = "60"
+      }
+    ]
   }
   # libvirt
   root_volume_pool = "default"
@@ -118,15 +128,15 @@ module "storj_node" {
   signed_identity_cert = file(pathexpand("~/.local/share/storj/identity/${local.nodes[count.index].fqdn}/identity.cert"))
   identity_key         = file(pathexpand("~/.local/share/storj/identity/${local.nodes[count.index].fqdn}/identity.key"))
   # butane common
-  fqdn                    = local.nodes[count.index].fqdn
-  cidr_ip_address         = local.nodes[count.index].cidr_ip_address
-  mac                     = local.nodes[count.index].mac
-  ssh_authorized_key      = local.ssh_authorized_key
-  nameservers             = local.nameservers
-  timezone                = local.timezone
-  rollout_wariness        = local.rollout_wariness
-  updates_periodic_window = local.updates_periodic_window
-  keymap                  = local.keymap
+  fqdn               = local.nodes[count.index].fqdn
+  cidr_ip_address    = local.nodes[count.index].cidr_ip_address
+  mac                = local.nodes[count.index].mac
+  ssh_authorized_key = local.ssh_authorized_key
+  nameservers        = local.nameservers
+  timezone           = local.timezone
+  rollout_wariness   = local.rollout_wariness
+  periodic_updates   = local.periodic_updates
+  keymap             = local.keymap
   # libvirt
   vcpu             = local.nodes[count.index].vcpu
   memory           = local.nodes[count.index].memory

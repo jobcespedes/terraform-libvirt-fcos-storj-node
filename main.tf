@@ -1,6 +1,6 @@
 module "fcos" {
   source  = "krestomatio/fcos/libvirt"
-  version = "0.0.9"
+  version = "0.0.10"
 
   # custom
   butane_snippets_additional = compact(
@@ -10,17 +10,17 @@ module "fcos" {
   )
 
   # common
-  fqdn                    = var.fqdn
-  cidr_ip_address         = var.cidr_ip_address
-  mac                     = var.mac
-  ssh_authorized_key      = var.ssh_authorized_key
-  nameservers             = var.nameservers
-  timezone                = var.timezone
-  rollout_wariness        = var.rollout_wariness
-  updates_periodic_window = var.updates_periodic_window
-  keymap                  = var.keymap
-  etc_hosts               = var.etc_hosts
-  etc_hosts_extra         = var.etc_hosts_extra
+  fqdn               = var.fqdn
+  cidr_ip_address    = var.cidr_ip_address
+  mac                = var.mac
+  ssh_authorized_key = var.ssh_authorized_key
+  nameservers        = var.nameservers
+  timezone           = var.timezone
+  rollout_wariness   = var.rollout_wariness
+  periodic_updates   = var.periodic_updates
+  keymap             = var.keymap
+  etc_hosts          = var.etc_hosts
+  etc_hosts_extra    = var.etc_hosts_extra
   # libvirt
   cpu_mode              = var.cpu_mode
   vcpu                  = var.vcpu
