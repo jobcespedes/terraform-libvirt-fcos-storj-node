@@ -57,6 +57,7 @@ variable "extra_parameters" {
   default     = []
   nullable    = false
 }
+
 # butane common
 variable "ssh_authorized_key" {
   type        = string

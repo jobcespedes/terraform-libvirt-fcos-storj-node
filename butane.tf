@@ -59,21 +59,26 @@ storage:
 
           # setup
           echo "Setting up storj-node..."
-          podman kill storj-node 2>/dev/null || echo
-          podman rm storj-node 2>/dev/null || echo
-          podman run --rm -e SETUP="true" \
-            -p 28967:28967/tcp \
-            -p 28967:28967/udp \
-            -p 127.0.0.1:14002:14002 \
-            -e WALLET="${var.wallet}" \
-            -e EMAIL="${var.email}" \
-            -e ADDRESS="${var.address}" \
-            -e STORAGE="${var.storage}" \
-            --user $(id -u):$(id -g) \
-            --volume "${local.storj_node_dir_path}/identity:/app/identity:Z" \
-            --volume "${local.data_volume_path}:/app/config:Z" \
-            --name storj-node docker.io/storjlabs/storagenode:latest ${join(" ", var.extra_parameters)}
-          echo "storj-node set up..."
+          if [ ! -f "${local.data_volume_path}/config.yaml" ]; then
+            echo "Setting up storj-node..."
+            podman kill storj-node 2>/dev/null || echo
+            podman rm storj-node 2>/dev/null || echo
+            podman run --rm -e SETUP="true" \
+              -p 28967:28967/tcp \
+              -p 28967:28967/udp \
+              -p 127.0.0.1:14002:14002 \
+              -e WALLET="${var.wallet}" \
+              -e EMAIL="${var.email}" \
+              -e ADDRESS="${var.address}" \
+              -e STORAGE="${var.storage}" \
+              --user $(id -u):$(id -g) \
+              --volume "${local.storj_node_dir_path}/identity:/app/identity:Z" \
+              --volume "${local.data_volume_path}:/app/config:Z" \
+              --name storj-node docker.io/storjlabs/storagenode:latest ${join(" ", var.extra_parameters)}
+            echo "storj-node set up..."
+          else
+            echo "storj-node config.yaml detected, not setting up..."
+          fi
 
           # install
           echo "Installing storj-node service..."
@@ -91,7 +96,7 @@ storage:
             --volume "${local.storj_node_dir_path}/identity:/app/identity:Z" \
             --volume "${local.data_volume_path}:/app/config:Z" \
             --name storj-node docker.io/storjlabs/storagenode:latest ${join(" ", var.extra_parameters)}
-          podman generate systemd --new --name storj-node > /etc/systemd/system/storj-node.service 
+          podman generate systemd --new --name storj-node > /etc/systemd/system/storj-node.service
           systemctl daemon-reload
           systemctl enable --now storj-node.service
           echo "storj-node service installed..."
