@@ -5,8 +5,8 @@ variant: fcos
 version: 1.4.0
 storage:
   files:
-    # pkg dependencies to be installed by os-additional-rpms.service
-    - path: /var/lib/os-additional-rpms.list
+    # pkg dependencies to be installed by additional-rpms.service
+    - path: /var/lib/additional-rpms.list
       overwrite: false
       append:
         - inline: |
@@ -112,7 +112,7 @@ systemd:
         Before=zincati.service
         Wants=network-online.target
         After=network-online.target
-        After=os-additional-rpms.service
+        After=additional-rpms.service
         ConditionPathExists=/usr/local/bin/storj-node-installer.sh
         ConditionPathExists=!/var/lib/%N.done
         StartLimitInterval=500
