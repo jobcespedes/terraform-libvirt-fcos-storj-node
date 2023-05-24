@@ -7,7 +7,11 @@ variable "image" {
     }
   )
   description = "/etc/host list"
-  default     = null
+  default = {
+    name    = "docker.io/storjlabs/storagenode"
+    version = "latest"
+  }
+  nullable = false
 }
 
 variable "port" {
