@@ -124,7 +124,7 @@ No outputs.
 | <a name="input_fqdn"></a> [fqdn](#input\_fqdn) | Node FQDN | `string` | n/a | yes |
 | <a name="input_identity_key"></a> [identity\_key](#input\_identity\_key) | Identity key. It should be previously [generated following docs](https://docs.storj.io/node/dependencies/identity) | `string` | n/a | yes |
 | <a name="input_ignition_pool"></a> [ignition\_pool](#input\_ignition\_pool) | Default ignition files pool | `string` | `null` | no |
-| <a name="input_image"></a> [image](#input\_image) | /etc/host list | <pre>object(<br>    {<br>      name    = optional(string, "docker.io/storjlabs/storagenode")<br>      version = optional(string, "latest")<br>    }<br>  )</pre> | `null` | no |
+| <a name="input_image"></a> [image](#input\_image) | /etc/host list | <pre>object(<br>    {<br>      name    = optional(string, "docker.io/storjlabs/storagenode")<br>      version = optional(string, "latest")<br>    }<br>  )</pre> | <pre>{<br>  "name": "docker.io/storjlabs/storagenode",<br>  "version": "latest"<br>}</pre> | no |
 | <a name="input_keymap"></a> [keymap](#input\_keymap) | Keymap | `string` | `null` | no |
 | <a name="input_log_level"></a> [log\_level](#input\_log\_level) | Operator's wallet | `string` | `null` | no |
 | <a name="input_log_volume_pool"></a> [log\_volume\_pool](#input\_log\_volume\_pool) | Node default log volume pool | `string` | `null` | no |
