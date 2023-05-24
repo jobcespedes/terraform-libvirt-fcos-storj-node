@@ -63,7 +63,7 @@ storage:
             echo "Setting up storj-node..."
             podman kill storj-node 2>/dev/null || echo
             podman rm storj-node 2>/dev/null || echo
-            podman run --rm -e SETUP="true" \
+            podman run --pull never --rm -e SETUP="true" \
               -p 28967:28967/tcp \
               -p 28967:28967/udp \
               -p 127.0.0.1:14002:14002 \
@@ -74,7 +74,7 @@ storage:
               --user $(id -u):$(id -g) \
               --volume "${local.storj_node_dir_path}/identity:/app/identity:Z" \
               --volume "${local.data_volume_path}:/app/config:Z" \
-              --name storj-node docker.io/storjlabs/storagenode:latest ${join(" ", var.extra_parameters)}
+              --name storj-node ${local.storj_node_image} ${join(" ", var.extra_parameters)}
             echo "storj-node set up..."
           else
             echo "storj-node config.yaml detected, not setting up..."
@@ -84,7 +84,7 @@ storage:
           echo "Installing storj-node service..."
           podman kill storj-node 2>/dev/null || echo
           podman rm storj-node 2>/dev/null || echo
-          podman create --pull newer --restart unless-stopped --stop-timeout 300 \
+          podman create --pull never --restart on-failure --stop-timeout ${local.systemd_stop_timeout} --stop-signal SIGTERM \
             -p 28967:28967/tcp \
             -p 28967:28967/udp \
             -p 127.0.0.1:14002:14002 \
@@ -95,13 +95,38 @@ storage:
             --user $(id -u):$(id -g) \
             --volume "${local.storj_node_dir_path}/identity:/app/identity:Z" \
             --volume "${local.data_volume_path}:/app/config:Z" \
-            --name storj-node docker.io/storjlabs/storagenode:latest ${join(" ", var.extra_parameters)}
-          podman generate systemd --new --name storj-node > /etc/systemd/system/storj-node.service
+            --name storj-node ${local.storj_node_image} ${join(" ", var.extra_parameters)}
+          podman generate systemd --new \
+            --restart-sec 10 \
+            --start-timeout 10 \
+            --stop-timeout ${local.systemd_stop_timeout} \
+            --after storj-node-image-pull.service \
+            --name storj-node > /etc/systemd/system/storj-node.service
           systemctl daemon-reload
           systemctl enable --now storj-node.service
           echo "storj-node service installed..."
 systemd:
   units:
+    - name: storj-node-image-pull.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description="Pull storj node image"
+        Wants=network-online.target
+        After=network-online.target
+        Before=install-storj-node.service
+        Before=storj-node.service
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        Restart=on-failure
+        RestartSec=10
+        TimeoutStartSec=180
+        ExecStart=/usr/bin/podman pull ${local.storj_node_image}
+
+        [Install]
+        WantedBy=multi-user.target
     - name: install-storj-node.service
       enabled: true
       contents: |
@@ -113,6 +138,7 @@ systemd:
         Wants=network-online.target
         After=network-online.target
         After=additional-rpms.service
+        After=storj-node-image-pull.service
         ConditionPathExists=/usr/local/bin/storj-node-installer.sh
         ConditionPathExists=!/var/lib/%N.done
         StartLimitInterval=500

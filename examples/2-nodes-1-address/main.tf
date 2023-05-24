@@ -10,6 +10,10 @@ locals {
   extra_parameters = [
     "--operator.wallet-features=zksync" # optional
   ]
+  image = {
+    name    = "docker.io/storjlabs/storagenode"
+    version = "latest"
+  }
   # butane common
   ssh_authorized_key = "ssh-rsa changeme"
   nameservers = [
@@ -118,6 +122,7 @@ module "storj_node" {
   source = "../.."
 
   # storj
+  image                = local.image
   address              = "${local.external_address}:${local.nodes[count.index].external_port}"
   port                 = local.port
   storage              = local.nodes[count.index].storage
@@ -146,7 +151,6 @@ module "storj_node" {
   log_volume_pool  = local.log_volume_pool
   data_volume_pool = local.nodes[count.index].data_volume_pool
   data_volume_size = local.nodes[count.index].data_volume_size
-  ignition_pool    = local.ignition_pool
 
   root_base_volume_name = libvirt_volume.fcos_image.name
   network_id            = libvirt_network.libvirt_fcos_base.id

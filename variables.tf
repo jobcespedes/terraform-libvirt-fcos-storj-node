@@ -1,4 +1,15 @@
 # storj node
+variable "image" {
+  type = object(
+    {
+      name    = optional(string, "docker.io/storjlabs/storagenode")
+      version = optional(string, "latest")
+    }
+  )
+  description = "/etc/host list"
+  default     = null
+}
+
 variable "port" {
   type        = number
   default     = 28967
