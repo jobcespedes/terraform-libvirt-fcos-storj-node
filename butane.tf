@@ -152,7 +152,6 @@ systemd:
         TimeoutStartSec=200
         ExecStart=/usr/local/bin/storj-node-installer.sh
         ExecStart=/bin/touch /var/lib/%N.done
-        ExecStop=/usr/bin/systemctl enable --now storj-node.service
 
         [Install]
         WantedBy=multi-user.target
