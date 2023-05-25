@@ -97,13 +97,13 @@ storage:
             --volume "${local.data_volume_path}:/app/config:Z" \
             --name storj-node ${local.storj_node_image} ${join(" ", var.extra_parameters)}
           podman generate systemd --new \
-            --restart-sec 10 \
-            --start-timeout 10 \
+            --restart-sec 15 \
+            --start-timeout 200 \
             --stop-timeout ${local.systemd_stop_timeout} \
             --after storj-node-image-pull.service \
             --name storj-node > /etc/systemd/system/storj-node.service
           systemctl daemon-reload
-          systemctl enable --now storj-node.service
+          systemctl enable storj-node.service
           echo "storj-node service installed..."
 systemd:
   units:
@@ -139,19 +139,20 @@ systemd:
         After=network-online.target
         After=additional-rpms.service
         After=storj-node-image-pull.service
+        OnSuccess=storj-node.service
         ConditionPathExists=/usr/local/bin/storj-node-installer.sh
         ConditionPathExists=!/var/lib/%N.done
-        StartLimitInterval=500
+        StartLimitInterval=700
         StartLimitBurst=3
 
         [Service]
         Type=oneshot
-        RemainAfterExit=yes
         Restart=on-failure
         RestartSec=60
-        TimeoutStartSec=300
+        TimeoutStartSec=200
         ExecStart=/usr/local/bin/storj-node-installer.sh
         ExecStart=/bin/touch /var/lib/%N.done
+        ExecStop=/usr/bin/systemctl enable --now storj-node.service
 
         [Install]
         WantedBy=multi-user.target

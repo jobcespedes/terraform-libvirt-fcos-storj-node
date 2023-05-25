@@ -93,7 +93,7 @@ No outputs.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_template"></a> [template](#provider\_template) | n/a |
+| <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
 
 ## Modules
 
