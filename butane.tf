@@ -84,7 +84,7 @@ storage:
           echo "Installing storj-node service..."
           podman kill storj-node 2>/dev/null || echo
           podman rm storj-node 2>/dev/null || echo
-          podman create --pull never --rm --restart on-failure --stop-timeout ${local.systemd_stop_timeout} --stop-signal SIGTERM \
+          podman create --pull never --rm --restart on-failure --stop-timeout ${local.systemd_stop_timeout} \
             -p 28967:28967/tcp \
             -p 28967:28967/udp \
             -p 127.0.0.1:14002:14002 \
