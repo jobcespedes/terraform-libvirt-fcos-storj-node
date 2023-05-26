@@ -98,7 +98,7 @@ storage:
             --name storj-node ${local.storj_node_image} ${join(" ", var.extra_parameters)}
           podman generate systemd --new \
             --restart-sec 15 \
-            --start-timeout 450 \
+            --start-timeout 180 \
             --stop-timeout ${local.systemd_stop_timeout} \
             --after storj-node-image-pull.service \
             --name storj-node > /etc/systemd/system/storj-node.service
