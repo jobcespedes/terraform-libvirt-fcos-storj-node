@@ -99,7 +99,7 @@ No outputs.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_fcos"></a> [fcos](#module\_fcos) | krestomatio/fcos/libvirt | 0.0.21 |
+| <a name="module_fcos"></a> [fcos](#module\_fcos) | krestomatio/fcos/libvirt | 0.0.24 |
 
 ## Resources
 
