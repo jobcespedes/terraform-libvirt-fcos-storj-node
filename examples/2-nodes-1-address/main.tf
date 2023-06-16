@@ -2,6 +2,12 @@
 locals {
   # module
   minimum_gb_in_bytes = 1000 * 1000 * 1000 * 560 # 560GB
+  # vm resources
+  vcpu   = 1
+  memory = 1024
+  # container limits
+  cpus_limit   = 0.7
+  memory_limit = "700m"
   # storj node
   external_address = "mynodes.example.com"
   port             = 28967
@@ -52,8 +58,8 @@ locals {
       fqdn             = "storj-node-01.example.com"
       mac              = "50:50:10:10:15:11"
       cidr_ip_address  = "10.10.15.11/24"
-      vcpu             = 1
-      memory           = 1024
+      vcpu             = local.vcpu
+      memory           = local.memory
       data_volume_pool = "default"
       data_volume_size = local.minimum_gb_in_bytes
     },
@@ -65,8 +71,8 @@ locals {
       fqdn             = "storj-node-02.example.com"
       mac              = "50:50:10:10:15:12"
       cidr_ip_address  = "10.10.15.12/24"
-      vcpu             = 1
-      memory           = 1024
+      vcpu             = local.vcpu
+      memory           = local.memory
       data_volume_pool = "default"
       data_volume_size = local.minimum_gb_in_bytes
     }
@@ -132,6 +138,8 @@ module "storj_node" {
   signed_ca_cert       = file(pathexpand("~/.local/share/storj/identity/${local.nodes[count.index].fqdn}/ca.cert"))
   signed_identity_cert = file(pathexpand("~/.local/share/storj/identity/${local.nodes[count.index].fqdn}/identity.cert"))
   identity_key         = file(pathexpand("~/.local/share/storj/identity/${local.nodes[count.index].fqdn}/identity.key"))
+  cpus_limit           = local.cpus_limit
+  memory_limit         = local.memory_limit
   # butane common
   fqdn               = local.nodes[count.index].fqdn
   cidr_ip_address    = local.nodes[count.index].cidr_ip_address
