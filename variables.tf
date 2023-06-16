@@ -73,6 +73,19 @@ variable "extra_parameters" {
   nullable    = false
 }
 
+variable "cpus_limit" {
+  type        = number
+  description = "Number of CPUs to limit the container"
+  default     = 0
+}
+
+variable "memory_limit" {
+  type        = string
+  description = "Amount of memory to limit the container"
+  default     = ""
+  nullable    = false
+}
+
 # butane common
 variable "ssh_authorized_key" {
   type        = string

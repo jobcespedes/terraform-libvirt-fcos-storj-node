@@ -85,6 +85,12 @@ storage:
           podman kill storj-node 2>/dev/null || echo
           podman rm storj-node 2>/dev/null || echo
           podman create --pull never --rm --restart on-failure --stop-timeout ${local.systemd_stop_timeout} \
+            %{~if var.cpus_limit > 0~}
+            --cpus ${var.cpus_limit} \
+            %{~endif~}
+            %{~if var.memory_limit != ""~}
+            --memory ${var.memory_limit} \
+            %{~endif~}
             -p 28967:28967/tcp \
             -p 28967:28967/udp \
             -p 127.0.0.1:14002:14002 \
