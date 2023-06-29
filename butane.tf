@@ -72,8 +72,9 @@ storage:
               -e ADDRESS="${var.address}" \
               -e STORAGE="${var.storage}" \
               --user $(id -u):$(id -g) \
-              --volume "${local.storj_node_dir_path}/identity:/app/identity:Z" \
-              --volume "${local.data_volume_path}:/app/config:Z" \
+              --security-opt label=disable \
+              --volume "${local.storj_node_dir_path}/identity:/app/identity" \
+              --volume "${local.data_volume_path}:/app/config" \
               --name storj-node ${local.storj_node_image} ${join(" ", var.extra_parameters)}
             echo "storj-node set up..."
           else
@@ -99,8 +100,9 @@ storage:
             -e ADDRESS="${var.address}" \
             -e STORAGE="${var.storage}" \
             --user $(id -u):$(id -g) \
-            --volume "${local.storj_node_dir_path}/identity:/app/identity:Z" \
-            --volume "${local.data_volume_path}:/app/config:Z" \
+            --security-opt label=disable \
+            --volume "${local.storj_node_dir_path}/identity:/app/identity" \
+            --volume "${local.data_volume_path}:/app/config" \
             --name storj-node ${local.storj_node_image} ${join(" ", var.extra_parameters)}
           podman generate systemd --new \
             --restart-sec 15 \
