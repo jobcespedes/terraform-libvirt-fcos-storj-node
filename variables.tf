@@ -6,7 +6,7 @@ variable "image" {
       version = optional(string, "latest")
     }
   )
-  description = "/etc/host list"
+  description = "Storj node container image"
   default = {
     name    = "docker.io/storjlabs/storagenode"
     version = "latest"
