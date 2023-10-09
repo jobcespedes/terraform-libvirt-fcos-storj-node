@@ -1,7 +1,7 @@
 Terraform module for creating a [Storj Node](https://www.storj.io/node/) using [Fedora CoreOS](https://docs.fedoraproject.org/en-US/fedora-coreos/), [Podman](https://podman.io/) and [Libvirt](https://libvirt.org/).
 
 ## Dependencies
-The following are the dependencies to create k3s cluster with this module:
+The following are the dependencies to create the VM with this module:
 * [libvirt](https://libvirt.org/)
 
 ## Prerequisites
