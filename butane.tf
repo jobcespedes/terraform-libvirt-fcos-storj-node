@@ -85,7 +85,7 @@ storage:
           echo "Installing storj-node service..."
           podman kill storj-node 2>/dev/null || echo
           podman rm storj-node 2>/dev/null || echo
-          podman create --pull never --rm --restart always --stop-timeout ${local.systemd_stop_timeout} \
+          podman create --pull never --restart always --stop-timeout ${local.systemd_stop_timeout} \
             %{~if var.cpus_limit > 0~}
             --cpus ${var.cpus_limit} \
             %{~endif~}
