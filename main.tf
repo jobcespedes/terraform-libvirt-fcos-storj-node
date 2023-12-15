@@ -1,6 +1,6 @@
 module "fcos" {
   source  = "krestomatio/fcos/libvirt"
-  version = "0.0.28"
+  version = "0.0.30"
 
   # custom
   butane_snippets_additional = compact(
@@ -35,6 +35,9 @@ module "fcos" {
   data_volume_path      = local.data_volume_path
   data_volume_size      = var.data_volume_size
   backup_volume         = false
+  swap_volume           = var.swap_volume
+  swap_volume_pool      = var.swap_volume_pool
+  swap_volume_size      = var.swap_volume_size
   ignition_pool         = var.ignition_pool
   autostart             = var.autostart
   wait_for_lease        = var.wait_for_lease

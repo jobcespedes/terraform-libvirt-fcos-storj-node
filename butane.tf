@@ -92,6 +92,9 @@ storage:
             %{~if var.memory_limit != ""~}
             --memory ${var.memory_limit} \
             %{~endif~}
+            %{~if var.memory_reservation != ""~}
+            --memory-reservation ${var.memory_reservation} \
+            %{~endif~}
             -p 28967:28967/tcp \
             -p 28967:28967/udp \
             -p 127.0.0.1:14002:14002 \

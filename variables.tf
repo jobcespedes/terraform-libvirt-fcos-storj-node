@@ -86,6 +86,13 @@ variable "memory_limit" {
   nullable    = false
 }
 
+variable "memory_reservation" {
+  type        = string
+  description = "Amount of memory to reserve for the container"
+  default     = ""
+  nullable    = false
+}
+
 # butane common
 variable "ssh_authorized_key" {
   type        = string
@@ -260,6 +267,23 @@ variable "data_volume_size" {
   type        = number
   description = "Node default data volume size in bytes"
   default     = null
+}
+
+variable "swap_volume" {
+  type        = bool
+  description = "Create swap volume"
+  default     = false
+}
+
+variable "swap_volume_pool" {
+  type        = string
+  description = "Node default swap volume pool"
+}
+
+variable "swap_volume_size" {
+  type        = number
+  description = "Node default swap volume size in bytes"
+  default     = 1024 * 1024 * 1024 * 1 # in bytes, 1 Gi
 }
 
 variable "ignition_pool" {
